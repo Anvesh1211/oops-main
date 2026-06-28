@@ -1,7 +1,0 @@
-S1016 4035 Friday 2026-03-01 11-1 Approved
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/Anvesh1211/oopspro.git
-git push -u origin main
