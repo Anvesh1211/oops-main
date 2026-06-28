@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="College Resource Booking System - Smart room booking with ML-powered suggestions and real-time availability tracking">
+    <title>College Resource Booking System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+    <div class="bg-particles" id="bgParticles"></div>
+
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1>CampusBook</h1>
+                <span>Smart Resource Booking</span>
+            </div>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="student" id="tab-student">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/></svg>
+                Student
+            </button>
+            <button class="nav-tab" data-tab="faculty" id="tab-faculty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Faculty
+            </button>
+            <button class="nav-tab" data-tab="schedule" id="tab-schedule">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Schedule
+            </button>
+            <button class="nav-tab" data-tab="analytics" id="tab-analytics">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Analytics
+            </button>
+        </div>
+        <div class="nav-status" id="navStatus">
+            <div class="status-dot online"></div>
+            <span>System Online</span>
+        </div>
+    </nav>
+
+
+    <main class="main-content">
+
+       
+        <section class="panel active" id="panel-student">
+            <div class="panel-header">
+                <h2>Book a Room</h2>
+                <p>Select your room, date, and time slot to check availability and book</p>
+            </div>
+
+            <div class="booking-form-container">
+                <div class="form-card glass-card">
+                    <div class="form-group">
+                        <label for="studentId">Student ID</label>
+                        <input type="text" id="studentId" placeholder="e.g., S1001" value="S1001">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="roomSelect">Room Number</label>
+                            <select id="roomSelect">
+                                <option value="">Select Room...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="floorFilter">Floor</label>
+                            <select id="floorFilter">
+                                <option value="0">All Floors</option>
+                                <option value="1">Floor 1 (1001-1410)</option>
+                                <option value="2">Floor 2 (2001-2410)</option>
+                                <option value="3">Floor 3 (3001-3410)</option>
+                                <option value="4">Floor 4 (4001-4410)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dateSelect">Date</label>
+                            <input type="date" id="dateSelect">
+                        </div>
+                        <div class="form-group">
+                            <label for="slotSelect">Time Slot</label>
+                            <select id="slotSelect">
+                                <option value="">Select Slot...</option>
+                                <option value="9-10">9:00 - 10:00</option>
+                                <option value="10-11">10:00 - 11:00</option>
+                                <option value="11-12">11:00 - 12:00</option>
+                                <option value="12-1">12:00 - 1:00</option>
+                                <option value="2-3">2:00 - 3:00</option>
+                                <option value="3-4">3:00 - 4:00</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn btn-check" id="btnCheck" onclick="checkAvailability()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Check Availability
+                        </button>
+                        <button class="btn btn-book" id="btnBook" onclick="bookRoom()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            Book Room
+                        </button>
+                        <button class="btn btn-view" id="btnMyBookings" onclick="viewMyBookings()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            My Bookings
+                        </button>
+                    </div>
+                </div>
+
+                <div class="result-card glass-card" id="resultCard" style="display:none;">
+                    <div class="result-header" id="resultHeader">
+                        <div class="result-icon" id="resultIcon"></div>
+                        <h3 id="resultTitle">Result</h3>
+                    </div>
+                    <div class="result-body" id="resultBody"></div>
+                </div>
+            </div>
+
+          
+            <div class="bookings-table-container" id="myBookingsContainer" style="display:none;">
+                <h3>My Bookings</h3>
+                <div class="table-wrapper">
+                    <table class="data-table" id="myBookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Room</th>
+                                <th>Date</th>
+                                <th>Slot</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myBookingsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+      
+        <section class="panel" id="panel-faculty">
+            <div class="panel-header">
+                <h2>Faculty Dashboard</h2>
+                <p>View all bookings and manage approval/rejection</p>
+            </div>
+
+            <div class="faculty-controls glass-card">
+                <button class="btn btn-primary" onclick="loadAllBookings()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Refresh Bookings
+                </button>
+                <div class="filter-group">
+                    <label>Filter Status:</label>
+                    <select id="statusFilter" onchange="filterBookings()">
+                        <option value="all">All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bookings-table-container">
+                <div class="table-wrapper">
+                    <table class="data-table" id="allBookingsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Room</th>
+                                <th>Date</th>
+                                <th>Slot</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allBookingsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon total">📊</div>
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Total Bookings</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon approved">✅</div>
+                    <div class="stat-value" id="statApproved">0</div>
+                    <div class="stat-label">Approved</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon pending">⏳</div>
+                    <div class="stat-value" id="statPending">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-icon rejected">❌</div>
+                    <div class="stat-value" id="statRejected">0</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+        </section>
+
+       
+        <section class="panel" id="panel-schedule">
+            <div class="panel-header">
+                <h2>Room Schedule</h2>
+                <p>Spreadsheet view of room availability — Green = Available, Red = Booked</p>
+            </div>
+
+            <div class="schedule-controls glass-card">
+                <div class="form-group">
+                    <label for="scheduleDateSelect">Select Date</label>
+                    <input type="date" id="scheduleDateSelect">
+                </div>
+                <button class="btn btn-primary" onclick="loadSchedule()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Load Schedule
+                </button>
+            </div>
+
+            <div class="spreadsheet-container" id="spreadsheetContainer">
+                <div class="table-wrapper">
+                    <table class="spreadsheet-table" id="spreadsheetTable">
+                        <thead>
+                            <tr>
+                                <th class="room-col">Room</th>
+                                <th>9-10</th>
+                                <th>10-11</th>
+                                <th>11-12</th>
+                                <th>12-1</th>
+                                <th>2-3</th>
+                                <th>3-4</th>
+                            </tr>
+                        </thead>
+                        <tbody id="spreadsheetBody"></tbody>
+                    </table>
+                </div>
+                <div class="spreadsheet-legend">
+                    <span class="legend-item"><span class="legend-dot available"></span> Available</span>
+                    <span class="legend-item"><span class="legend-dot booked"></span> Booked</span>
+                    <span class="legend-item"><span class="legend-dot pending"></span> Pending</span>
+                </div>
+            </div>
+        </section>
+
+   
+        <section class="panel" id="panel-analytics">
+            <div class="panel-header">
+                <h2>System Analytics</h2>
+                <p>System health, ML model status, and architecture overview</p>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="analytics-card glass-card">
+                    <h3>🏗️ System Architecture</h3>
+                    <div class="architecture-diagram">
+                        <div class="arch-layer" style="--delay: 0">
+                            <div class="arch-box ui">Web UI (HTML/CSS/JS)</div>
+                        </div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-layer" style="--delay: 1">
+                            <div class="arch-box flask">Flask Backend (Python)</div>
+                        </div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-layer" style="--delay: 2">
+                            <div class="arch-box cpp">C++ OOP Engine</div>
+                        </div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-layer" style="--delay: 3">
+                            <div class="arch-box db">SQLite Database</div>
+                        </div>
+                        <div class="arch-arrow">↓</div>
+                        <div class="arch-layer" style="--delay: 4">
+                            <div class="arch-box ml">ML Models (Jupyter)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card glass-card">
+                    <h3>🔧 System Health</h3>
+                    <div class="health-items" id="healthItems">
+                        <div class="health-item loading">
+                            <span class="health-dot"></span>
+                            <span>Checking system status...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card glass-card">
+                    <h3>🧠 OOP Concepts Used</h3>
+                    <div class="concepts-list">
+                        <div class="concept-item">
+                            <span class="concept-badge">1</span>
+                            <div>
+                                <strong>Abstraction</strong>
+                                <p>User is an abstract base class with pure virtual functions</p>
+                            </div>
+                        </div>
+                        <div class="concept-item">
+                            <span class="concept-badge">2</span>
+                            <div>
+                                <strong>Inheritance</strong>
+                                <p>Student and Faculty inherit from User</p>
+                            </div>
+                        </div>
+                        <div class="concept-item">
+                            <span class="concept-badge">3</span>
+                            <div>
+                                <strong>Encapsulation</strong>
+                                <p>Private data with getters/setters in Booking class</p>
+                            </div>
+                        </div>
+                        <div class="concept-item">
+                            <span class="concept-badge">4</span>
+                            <div>
+                                <strong>Polymorphism</strong>
+                                <p>Virtual dispatch for showMenu() and getRole()</p>
+                            </div>
+                        </div>
+                        <div class="concept-item">
+                            <span class="concept-badge">5</span>
+                            <div>
+                                <strong>Composition</strong>
+                                <p>BookingManager composes FileManager, MLRecommendation, RoomGenerator</p>
+                            </div>
+                        </div>
+                        <div class="concept-item">
+                            <span class="concept-badge">6</span>
+                            <div>
+                                <strong>Dynamic Objects</strong>
+                                <p>Runtime vector management of Booking objects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card glass-card">
+                    <h3>🤖 ML Models</h3>
+                    <div class="ml-models-list">
+                        <div class="ml-model-item">
+                            <div class="ml-model-icon">🌲</div>
+                            <div>
+                                <strong>Random Forest</strong>
+                                <p>Ensemble learning for booking pattern prediction</p>
+                            </div>
+                        </div>
+                        <div class="ml-model-item">
+                            <div class="ml-model-icon">🌳</div>
+                            <div>
+                                <strong>Decision Tree</strong>
+                                <p>Interpretable classification of room demand</p>
+                            </div>
+                        </div>
+                        <div class="ml-model-item">
+                            <div class="ml-model-icon">📈</div>
+                            <div>
+                                <strong>Logistic Regression</strong>
+                                <p>Probability estimation for slot availability</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+  
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

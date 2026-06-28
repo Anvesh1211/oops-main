@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student Dashboard — ResourcePro College Resource Booking System">
+    <title>Student Dashboard — ResourcePro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-glass: rgba(99, 102, 241, 0.18);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #6366f1;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-error: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+            --gradient-success: linear-gradient(135deg, #10b981, #34d399);
+            --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        /* Top Bar */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 32px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-glass);
+            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .topbar-brand {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .topbar-brand .icon {
+            width: 38px; height: 38px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .topbar-brand .icon svg { width: 20px; height: 20px; color: white; }
+        .topbar-brand h1 { font-size: 18px; font-weight: 700; }
+        .topbar-brand .badge {
+            padding: 3px 10px; background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px;
+            font-size: 11px; color: #6ee7b7; font-weight: 600; text-transform: uppercase;
+        }
+        .topbar-actions { display: flex; align-items: center; gap: 16px; }
+        .topbar-user {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .topbar-user .avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; color: white;
+        }
+        .topbar-user .info { text-align: right; }
+        .topbar-user .info .name { font-size: 13px; font-weight: 600; }
+        .topbar-user .info .role { font-size: 11px; color: var(--text-muted); }
+        .btn-logout {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: var(--radius-sm);
+            color: #fca5a5; font-size: 13px; font-weight: 500;
+            font-family: inherit; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-logout:hover { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        /* Main Layout */
+        .dashboard-content {
+            max-width: 1200px; margin: 0 auto;
+            padding: 32px;
+        }
+        .welcome-section {
+            margin-bottom: 32px;
+        }
+        .welcome-section h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+        .welcome-section p { color: var(--text-secondary); font-size: 15px; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px; margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            padding: 22px;
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+        .stat-card .stat-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .stat-card .stat-icon {
+            font-size: 24px;
+        }
+        .stat-card .stat-trend {
+            font-size: 11px; font-weight: 600;
+            padding: 3px 8px; border-radius: 6px;
+        }
+        .stat-card .stat-trend.up { color: #6ee7b7; background: rgba(16, 185, 129, 0.12); }
+        .stat-card .stat-value { font-size: 30px; font-weight: 800; margin-bottom: 4px; }
+        .stat-card .stat-label { font-size: 13px; color: var(--text-muted); }
+
+        /* Cards */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            padding: 28px;
+            backdrop-filter: blur(12px);
+        }
+        .section-card h3 {
+            font-size: 16px; font-weight: 700;
+            margin-bottom: 18px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .action-btn {
+            padding: 18px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 13px; font-weight: 500; font-family: inherit;
+            cursor: pointer; transition: all 0.3s;
+            text-align: center;
+        }
+        .action-btn .action-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+        .action-btn:hover {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.06);
+            transform: translateY(-2px);
+        }
+
+        /* Activity List */
+        .activity-list { list-style: none; }
+        .activity-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.08);
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .activity-dot.login { background: var(--accent-success); }
+        .activity-dot.register { background: var(--accent-primary); }
+        .activity-dot.other { background: var(--accent-warning); }
+        .activity-text { font-size: 13px; flex: 1; }
+        .activity-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+        /* Permissions List */
+        .permissions-list { list-style: none; }
+        .permission-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            margin-bottom: 8px; font-size: 13px;
+            transition: all 0.2s;
+        }
+        .permission-item:hover { background: rgba(99, 102, 241, 0.05); }
+        .permission-check { color: var(--accent-success); font-size: 16px; }
+
+        /* Loading */
+        .loading-spinner {
+            display: flex; align-items: center; justify-content: center;
+            padding: 40px; color: var(--text-muted); font-size: 14px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px;
+            padding: 14px 20px; border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 500;
+            z-index: 200; opacity: 0; transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast-success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+        .toast-error { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+
+        @media (max-width: 768px) {
+            .dashboard-content { padding: 20px; }
+            .section-grid { grid-template-columns: 1fr; }
+            .topbar { padding: 12px 16px; }
+            .topbar-user .info { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <nav class="topbar">
+        <div class="topbar-brand">
+            <div class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h1>ResourcePro</h1>
+            <span class="badge">Student</span>
+        </div>
+        <div class="topbar-actions">
+            <a href="/" style="color: var(--accent-primary); font-size: 13px; text-decoration: none; font-weight: 500;">📅 Booking System</a>
+            <div class="topbar-user">
+                <div class="info">
+                    <div class="name" id="userName">Loading...</div>
+                    <div class="role">Student</div>
+                </div>
+                <div class="avatar" id="userAvatar">?</div>
+            </div>
+            <button class="btn-logout" onclick="Auth.logout()">Sign Out</button>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <div class="welcome-section">
+            <h2 id="welcomeText">Welcome back!</h2>
+            <p>Here's an overview of your activity and available resources.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📚</span>
+                    <span class="stat-trend up">Active</span>
+                </div>
+                <div class="stat-value" id="statResources">—</div>
+                <div class="stat-label">Available Resources</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🏠</span>
+                </div>
+                <div class="stat-value" id="statBookings">—</div>
+                <div class="stat-label">My Bookings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">✅</span>
+                </div>
+                <div class="stat-value" id="statApproved">—</div>
+                <div class="stat-label">Approved</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">⏳</span>
+                </div>
+                <div class="stat-value" id="statPending">—</div>
+                <div class="stat-label">Pending Approval</div>
+            </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="section-grid">
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <h3>⚡ Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="window.location.href='/'">
+                        <span class="action-icon">🏠</span>
+                        Book a Room
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='/'">
+                        <span class="action-icon">📅</span>
+                        View Schedule
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='/'">
+                        <span class="action-icon">📊</span>
+                        Analytics
+                    </button>
+                    <button class="action-btn" onclick="loadProfile()">
+                        <span class="action-icon">👤</span>
+                        My Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section-card">
+                <h3>📋 Recent Activity</h3>
+                <ul class="activity-list" id="activityList">
+                    <li class="loading-spinner">Loading activity...</li>
+                </ul>
+            </div>
+
+            <!-- Permissions -->
+            <div class="section-card">
+                <h3>🔐 Your Permissions</h3>
+                <ul class="permissions-list">
+                    <li class="permission-item"><span class="permission-check">✓</span> View available resources</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> Book rooms</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> Download materials</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> View room schedule</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> View analytics</li>
+                </ul>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="section-card" id="profileCard">
+                <h3>👤 Profile Info</h3>
+                <div id="profileContent">
+                    <div class="loading-spinner">Loading profile...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast toast-success" id="toast"></div>
+
+    <script src="/auth.js"></script>
+    <script>
+        // Protect this route — student only
+        if (!Auth.requireAuth(['student'])) {
+            // requireAuth redirects if not authorized
+        }
+
+        const user = Auth.getUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('welcomeText').textContent = `Welcome back, ${user.name.split(' ')[0]}!`;
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                // Load profile
+                const profile = await Auth.getProfile();
+                if (profile && profile.status === 'success') {
+                    const u = profile.user;
+                    document.getElementById('profileContent').innerHTML = `
+                        <div style="display: grid; gap: 12px;">
+                            <div class="permission-item"><strong style="min-width:60px">Name:</strong> ${u.name}</div>
+                            <div class="permission-item"><strong style="min-width:60px">Email:</strong> ${u.email}</div>
+                            <div class="permission-item"><strong style="min-width:60px">Role:</strong> ${u.role}</div>
+                            <div class="permission-item"><strong style="min-width:60px">Joined:</strong> ${new Date(u.created_at).toLocaleDateString()}</div>
+                            <div class="permission-item"><strong style="min-width:60px">Last Login:</strong> ${u.last_login ? new Date(u.last_login).toLocaleString() : 'N/A'}</div>
+                        </div>
+                    `;
+                }
+
+                // Load activity
+                const activity = await Auth.getActivity(10);
+                const actList = document.getElementById('activityList');
+                if (activity && activity.status === 'success' && activity.activities.length > 0) {
+                    actList.innerHTML = activity.activities.map(a => {
+                        const dotClass = a.action.includes('login') ? 'login' : a.action.includes('register') ? 'register' : 'other';
+                        const timeStr = new Date(a.created_at).toLocaleString();
+                        return `<li class="activity-item">
+                            <span class="activity-dot ${dotClass}"></span>
+                            <span class="activity-text">${a.action}${a.details ? ' — ' + a.details : ''}</span>
+                            <span class="activity-time">${timeStr}</span>
+                        </li>`;
+                    }).join('');
+                } else {
+                    actList.innerHTML = '<li class="activity-item"><span class="activity-text" style="color:var(--text-muted)">No recent activity</span></li>';
+                }
+
+                // Load booking stats
+                try {
+                    const statsRes = await fetch('/api/stats');
+                    const stats = await statsRes.json();
+                    document.getElementById('statResources').textContent = '1,640';
+                    document.getElementById('statBookings').textContent = stats.total || 0;
+                    document.getElementById('statApproved').textContent = stats.approved || 0;
+                    document.getElementById('statPending').textContent = stats.pending || 0;
+                } catch {
+                    document.getElementById('statResources').textContent = '1,640';
+                    document.getElementById('statBookings').textContent = '—';
+                }
+            } catch (err) {
+                console.error('Dashboard load error:', err);
+            }
+        }
+
+        function loadProfile() {
+            document.getElementById('profileCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

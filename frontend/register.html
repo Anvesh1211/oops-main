@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your ResourcePro account — College Resource Booking System">
+    <title>Register — ResourcePro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-primary: #436ac4;
+            --bg-secondary: #173064;
+            --bg-card: rgba(17, 24, 39, 0.8);
+            --border-glass: rgba(99, 102, 241, 0.2);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --accent-success: #10b981;
+            --accent-error: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6, #a78bfa);
+            --gradient-bg: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+            --shadow-glow: 0 0 30px rgba(203, 203, 222, 0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: var(--gradient-bg);
+            z-index: 0;
+        }
+
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-orbs .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.25;
+            animation: orbFloat 20s infinite ease-in-out;
+        }
+
+        .bg-orbs .orb:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: #6366f1;
+            top: -10%;
+            left: -5%;
+        }
+
+        .bg-orbs .orb:nth-child(2) {
+            width: 350px;
+            height: 350px;
+            background: #8b5cf6;
+            bottom: -15%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .bg-orbs .orb:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            background: #a78bfa;
+            top: 40%;
+            right: 20%;
+            animation-delay: -14s;
+        }
+
+        @keyframes orbFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(40px, -30px) scale(1.05);
+            }
+
+            50% {
+                transform: translate(-20px, 20px) scale(0.95);
+            }
+
+            75% {
+                transform: translate(30px, 40px) scale(1.02);
+            }
+        }
+
+        .auth-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+        }
+
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-brand .brand-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-glow);
+            animation: brandPulse 3s infinite ease-in-out;
+        }
+
+        .auth-brand .brand-icon svg {
+            width: 30px;
+            height: 30px;
+            color: white;
+        }
+
+        .auth-brand h1 {
+            font-size: 26px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-brand p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        @keyframes brandPulse {
+
+            0%,
+            100% {
+                box-shadow: var(--shadow-glow);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(99, 102, 241, 0.3);
+            }
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius);
+            padding: 36px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .auth-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .auth-card .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-group select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--text-primary);
+        }
+
+        .toggle-password svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .password-strength .bar {
+            height: 100%;
+            width: 0;
+            border-radius: 2px;
+            transition: all 0.4s ease;
+        }
+
+        .password-strength .bar.weak {
+            width: 25%;
+            background: #ef4444;
+        }
+
+        .password-strength .bar.fair {
+            width: 50%;
+            background: #f59e0b;
+        }
+
+        .password-strength .bar.good {
+            width: 75%;
+            background: #3b82f6;
+        }
+
+        .password-strength .bar.strong {
+            width: 100%;
+            background: #10b981;
+        }
+
+        .password-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-primary);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-auth:active {
+            transform: translateY(0);
+        }
+
+        .btn-auth:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-auth .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin: 0 auto;
+        }
+
+        .btn-auth.loading .btn-text {
+            display: none;
+        }
+
+        .btn-auth.loading .spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .auth-footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .auth-footer a:hover {
+            color: #8b5cf6;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+            animation: alertSlide 0.3s ease;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+        }
+
+        @keyframes alertSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .role-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .role-card {
+            padding: 16px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.7);
+            border: 2px solid rgba(99, 102, 241, 0.15);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .role-card.selected {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+        }
+
+        .role-card .role-emoji {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .role-card .role-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .role-card .role-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 24px;
+            }
+
+            .form-row,
+            .role-cards {
+                flex-direction: column;
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+    <div class="auth-container">
+        <div class="auth-brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+            </div>
+            <h1>ResourcePro</h1>
+            <p>College Resource Booking System</p>
+        </div>
+
+        <div class="auth-card">
+            <h2>Create Account</h2>
+            <p class="subtitle">Join ResourcePro to book and manage campus resources</p>
+
+            <div class="alert alert-error" id="alertError"></div>
+            <div class="alert alert-success" id="alertSuccess"></div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" placeholder="Enter your full name" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="you@college.edu" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="regPassword" placeholder="Min 8 chars, upper, lower, digit, symbol"
+                            required autocomplete="new-password" oninput="checkStrength(this.value)">
+                        <button type="button" class="toggle-password" onclick="togglePassword('regPassword', this)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="bar" id="strengthBar"></div>
+                    </div>
+                    <div class="password-hint" id="strengthText">Use 8+ characters with uppercase, lowercase, digit &
+                        symbol</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Your Role</label>
+                    <div class="role-cards">
+                        <div class="role-card" onclick="selectRole('student', this)" id="roleStudent">
+                            <div class="role-emoji">🎓</div>
+                            <div class="role-name">Student</div>
+                            <div class="role-desc">Book rooms & view resources</div>
+                        </div>
+                        <div class="role-card" onclick="selectRole('faculty', this)" id="roleFaculty">
+                            <div class="role-emoji">👨‍🏫</div>
+                            <div class="role-name">Faculty</div>
+                            <div class="role-desc">Manage & approve bookings</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="regRole" required>
+                </div>
+
+                <button type="submit" class="btn-auth" id="btnRegister">
+                    <span class="btn-text">Create Account</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="/login.html">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/auth.js"></script>
+    <script>
+        if (Auth.isLoggedIn()) {
+            const role = Auth.getUserRole();
+            if (role === 'student') window.location.href = '/dashboard_student.html';
+            else if (role === 'faculty') window.location.href = '/dashboard_faculty.html';
+        }
+
+        let selectedRole = '';
+
+        function selectRole(role, el) {
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedRole = role;
+            document.getElementById('regRole').value = role;
+        }
+
+        function showAlert(id, message) {
+            const el = document.getElementById(id);
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isPass = input.type === 'password';
+            input.type = isPass ? 'text' : 'password';
+            btn.innerHTML = isPass
+                ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+                : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+        }
+
+        function checkStrength(password) {
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+
+            bar.className = 'bar';
+            if (score <= 1) { bar.classList.add('weak'); text.textContent = 'Weak — add more character types'; }
+            else if (score === 2) { bar.classList.add('fair'); text.textContent = 'Fair — keep going'; }
+            else if (score === 3 || score === 4) { bar.classList.add('good'); text.textContent = 'Good — almost there'; }
+            else { bar.classList.add('strong'); text.textContent = 'Strong password ✓'; }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            if (!selectedRole) { showAlert('alertError', 'Please select a role'); return; }
+
+            const btn = document.getElementById('btnRegister');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            const result = await Auth.register(name, email, password, selectedRole);
+
+            btn.classList.remove('loading');
+            btn.disabled = false;
+
+            if (result.status === 'success') {
+                showAlert('alertSuccess', 'Account created! Redirecting...');
+                setTimeout(() => {
+                    if (selectedRole === 'student') window.location.href = '/dashboard_student.html';
+                    else window.location.href = '/dashboard_faculty.html';
+                }, 800);
+            } else {
+                showAlert('alertError', result.message);
+            }
+        }
+    </script>
+</body>
+
+</html>

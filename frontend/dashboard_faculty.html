@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Faculty Dashboard — ResourcePro College Resource Booking System">
+    <title>Faculty Dashboard — ResourcePro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-glass: rgba(139, 92, 246, 0.18);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-error: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #8b5cf6, #a78bfa, #c4b5fd);
+            --gradient-faculty: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.12);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        /* Top Bar */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 32px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-glass);
+            backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .topbar-brand { display: flex; align-items: center; gap: 12px; }
+        .topbar-brand .icon {
+            width: 38px; height: 38px; background: var(--gradient-faculty);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        }
+        .topbar-brand .icon svg { width: 20px; height: 20px; color: white; }
+        .topbar-brand h1 { font-size: 18px; font-weight: 700; }
+        .topbar-brand .badge {
+            padding: 3px 10px; background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 20px;
+            font-size: 11px; color: #c4b5fd; font-weight: 600; text-transform: uppercase;
+        }
+        .topbar-actions { display: flex; align-items: center; gap: 16px; }
+        .topbar-user { display: flex; align-items: center; gap: 10px; }
+        .topbar-user .avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--gradient-faculty);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; color: white;
+        }
+        .topbar-user .info { text-align: right; }
+        .topbar-user .info .name { font-size: 13px; font-weight: 600; }
+        .topbar-user .info .role { font-size: 11px; color: var(--text-muted); }
+        .btn-logout {
+            padding: 8px 16px; background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-sm);
+            color: #fca5a5; font-size: 13px; font-weight: 500;
+            font-family: inherit; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-logout:hover { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        /* Main Layout */
+        .dashboard-content { max-width: 1280px; margin: 0 auto; padding: 32px; }
+        .welcome-section { margin-bottom: 32px; }
+        .welcome-section h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+        .welcome-section p { color: var(--text-secondary); font-size: 15px; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px; margin-bottom: 32px;
+        }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border-glass);
+            border-radius: var(--radius); padding: 22px; backdrop-filter: blur(12px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+        .stat-card .stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .stat-card .stat-icon { font-size: 24px; }
+        .stat-card .stat-value { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+        .stat-card .stat-label { font-size: 13px; color: var(--text-muted); }
+
+        /* Section Cards */
+        .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+        .section-card {
+            background: var(--bg-card); border: 1px solid var(--border-glass);
+            border-radius: var(--radius); padding: 28px; backdrop-filter: blur(12px);
+        }
+        .section-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+        .section-card.full-width { grid-column: 1 / -1; }
+
+        /* Quick Actions */
+        .quick-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .action-btn {
+            padding: 18px 14px; background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-glass); border-radius: var(--radius-sm);
+            color: var(--text-primary); font-size: 12px; font-weight: 500; font-family: inherit;
+            cursor: pointer; transition: all 0.3s; text-align: center;
+        }
+        .action-btn .action-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+        .action-btn:hover { border-color: var(--accent-primary); background: rgba(139, 92, 246, 0.06); transform: translateY(-2px); }
+
+        /* Permissions */
+        .permissions-list { list-style: none; }
+        .permission-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px; margin-bottom: 8px; font-size: 13px; transition: all 0.2s;
+        }
+        .permission-item:hover { background: rgba(139, 92, 246, 0.05); }
+        .permission-check { color: var(--accent-success); font-size: 16px; }
+
+        /* Bookings Table */
+        .table-wrapper { overflow-x: auto; }
+        .data-table {
+            width: 100%; border-collapse: collapse; font-size: 13px;
+        }
+        .data-table th {
+            text-align: left; padding: 12px 14px;
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-secondary); font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px;
+        }
+        .data-table td {
+            padding: 12px 14px; border-bottom: 1px solid rgba(99, 102, 241, 0.06);
+        }
+        .data-table tr:hover td { background: rgba(139, 92, 246, 0.03); }
+        .status-badge {
+            padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+        }
+        .status-badge.approved { background: rgba(16, 185, 129, 0.12); color: #6ee7b7; }
+        .status-badge.pending { background: rgba(245, 158, 11, 0.12); color: #fcd34d; }
+        .status-badge.rejected { background: rgba(239, 68, 68, 0.12); color: #fca5a5; }
+        .btn-sm {
+            padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600;
+            font-family: inherit; cursor: pointer; border: none; transition: all 0.2s;
+        }
+        .btn-approve { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        .btn-approve:hover { background: rgba(16, 185, 129, 0.25); }
+        .btn-reject { background: rgba(239, 68, 68, 0.15); color: #fca5a5; margin-left: 6px; }
+        .btn-reject:hover { background: rgba(239, 68, 68, 0.25); }
+
+        /* Students List */
+        .student-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 14px; background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px; margin-bottom: 8px; font-size: 13px;
+        }
+        .student-item .student-info { display: flex; align-items: center; gap: 10px; }
+        .student-item .student-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 12px; color: white;
+        }
+
+        /* Activity */
+        .activity-list { list-style: none; }
+        .activity-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 0; border-bottom: 1px solid rgba(139, 92, 246, 0.08);
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .activity-dot.login { background: var(--accent-success); }
+        .activity-dot.register { background: var(--accent-primary); }
+        .activity-dot.other { background: var(--accent-warning); }
+        .activity-text { font-size: 13px; flex: 1; }
+        .activity-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+        .loading-spinner {
+            display: flex; align-items: center; justify-content: center;
+            padding: 30px; color: var(--text-muted); font-size: 14px;
+        }
+
+        /* Controls Bar */
+        .controls-bar {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+        }
+        .btn-control {
+            padding: 8px 16px; background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.25); border-radius: var(--radius-sm);
+            color: #c4b5fd; font-size: 13px; font-weight: 500;
+            font-family: inherit; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-control:hover { background: rgba(139, 92, 246, 0.2); }
+        .filter-select {
+            padding: 8px 14px; background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border-glass); border-radius: var(--radius-sm);
+            color: var(--text-primary); font-size: 13px; font-family: inherit; outline: none;
+        }
+        .filter-select option { background: var(--bg-secondary); }
+
+        @media (max-width: 768px) {
+            .dashboard-content { padding: 20px; }
+            .section-grid { grid-template-columns: 1fr; }
+            .quick-actions { grid-template-columns: 1fr 1fr; }
+            .topbar { padding: 12px 16px; }
+            .topbar-user .info { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="topbar">
+        <div class="topbar-brand">
+            <div class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h1>ResourcePro</h1>
+            <span class="badge">Faculty</span>
+        </div>
+        <div class="topbar-actions">
+            <a href="/" style="color: var(--accent-primary); font-size: 13px; text-decoration: none; font-weight: 500;">📅 Booking System</a>
+            <div class="topbar-user">
+                <div class="info">
+                    <div class="name" id="userName">Loading...</div>
+                    <div class="role">Faculty</div>
+                </div>
+                <div class="avatar" id="userAvatar">?</div>
+            </div>
+            <button class="btn-logout" onclick="Auth.logout()">Sign Out</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-content">
+        <div class="welcome-section">
+            <h2 id="welcomeText">Welcome back!</h2>
+            <p>Manage resources, review bookings, and monitor student activity.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">📊</span></div>
+                <div class="stat-value" id="statTotal">—</div>
+                <div class="stat-label">Total Bookings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">✅</span></div>
+                <div class="stat-value" id="statApproved">—</div>
+                <div class="stat-label">Approved</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">⏳</span></div>
+                <div class="stat-value" id="statPending">—</div>
+                <div class="stat-label">Pending Review</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">❌</span></div>
+                <div class="stat-value" id="statRejected">—</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">👥</span></div>
+                <div class="stat-value" id="statStudents">—</div>
+                <div class="stat-label">Registered Students</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions + Permissions -->
+        <div class="section-grid">
+            <div class="section-card">
+                <h3>⚡ Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="window.location.href='/'">
+                        <span class="action-icon">📅</span>Manage Bookings
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='/'">
+                        <span class="action-icon">📊</span>Analytics
+                    </button>
+                    <button class="action-btn" onclick="loadStudents()">
+                        <span class="action-icon">👥</span>View Students
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='/'">
+                        <span class="action-icon">🏠</span>Rooms
+                    </button>
+                    <button class="action-btn" onclick="loadProfile()">
+                        <span class="action-icon">👤</span>Profile
+                    </button>
+                    <button class="action-btn" onclick="loadActivity()">
+                        <span class="action-icon">📋</span>Activity
+                    </button>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h3>🔐 Faculty Permissions</h3>
+                <ul class="permissions-list">
+                    <li class="permission-item"><span class="permission-check">✓</span> Upload resources</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> Manage content</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> View student usage</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> Approve / reject bookings</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> View full analytics</li>
+                    <li class="permission-item"><span class="permission-check">✓</span> View all users</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pending Bookings Table -->
+        <div class="section-card full-width" style="grid-column: 1 / -1; margin-bottom: 24px;">
+            <h3>📋 Booking Management</h3>
+            <div class="controls-bar">
+                <button class="btn-control" onclick="loadBookings()">🔄 Refresh</button>
+                <select class="filter-select" id="statusFilter" onchange="filterBookings()">
+                    <option value="all">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table" id="bookingsTable">
+                    <thead>
+                        <tr><th>ID</th><th>User</th><th>Room</th><th>Date</th><th>Slot</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="bookingsBody">
+                        <tr><td colspan="7" class="loading-spinner">Loading bookings...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Students + Activity -->
+        <div class="section-grid">
+            <div class="section-card" id="studentsCard">
+                <h3>👥 Registered Students</h3>
+                <div id="studentsList"><div class="loading-spinner">Click "View Students" to load</div></div>
+            </div>
+
+            <div class="section-card" id="activityCard">
+                <h3>📋 My Activity</h3>
+                <ul class="activity-list" id="activityList">
+                    <li class="loading-spinner">Loading activity...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="/auth.js"></script>
+    <script>
+        // Protect this route — faculty only
+        if (!Auth.requireAuth(['faculty'])) {}
+
+        const user = Auth.getUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('welcomeText').textContent = `Welcome back, ${user.name.split(' ')[0]}!`;
+        }
+
+        let allBookings = [];
+
+        async function loadDashboard() {
+            try {
+                // Stats
+                const statsRes = await fetch('/api/stats');
+                const stats = await statsRes.json();
+                document.getElementById('statTotal').textContent = stats.total || 0;
+                document.getElementById('statApproved').textContent = stats.approved || 0;
+                document.getElementById('statPending').textContent = stats.pending || 0;
+                document.getElementById('statRejected').textContent = stats.rejected || 0;
+            } catch (e) { console.error('Stats error:', e); }
+
+            loadBookings();
+            loadActivity();
+            loadStudentCount();
+        }
+
+        async function loadBookings() {
+            try {
+                const res = await fetch('/api/allbookings');
+                const data = await res.json();
+                allBookings = data.bookings || [];
+                renderBookings(allBookings);
+            } catch (e) {
+                document.getElementById('bookingsBody').innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:20px;text-align:center;">Failed to load bookings</td></tr>';
+            }
+        }
+
+        function renderBookings(bookings) {
+            const tbody = document.getElementById('bookingsBody');
+            if (bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted);padding:20px;text-align:center;">No bookings found</td></tr>';
+                return;
+            }
+            tbody.innerHTML = bookings.slice(0, 50).map(b => `
+                <tr>
+                    <td>${b.id}</td>
+                    <td>${b.user}</td>
+                    <td>${b.room}</td>
+                    <td>${b.date}</td>
+                    <td>${b.slot}</td>
+                    <td><span class="status-badge ${b.status.toLowerCase()}">${b.status}</span></td>
+                    <td>
+                        ${b.status === 'Pending' ? `
+                            <button class="btn-sm btn-approve" onclick="approveBooking(${b.id})">Approve</button>
+                            <button class="btn-sm btn-reject" onclick="rejectBooking(${b.id})">Reject</button>
+                        ` : '—'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterBookings() {
+            const filter = document.getElementById('statusFilter').value;
+            if (filter === 'all') renderBookings(allBookings);
+            else renderBookings(allBookings.filter(b => b.status === filter));
+        }
+
+        async function approveBooking(id) {
+            try {
+                const res = await Auth.authFetch('/api/approve', {
+                    method: 'POST',
+                    body: JSON.stringify({ id })
+                });
+                if (res) { loadBookings(); loadDashboard(); }
+            } catch (e) { console.error(e); }
+        }
+
+        async function rejectBooking(id) {
+            try {
+                const res = await Auth.authFetch('/api/reject', {
+                    method: 'POST',
+                    body: JSON.stringify({ id })
+                });
+                if (res) { loadBookings(); loadDashboard(); }
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadStudents() {
+            try {
+                const res = await Auth.authFetch('/api/auth/users?role=student');
+                if (!res) return;
+                const data = await res.json();
+                if (data.status === 'success' && data.users.length > 0) {
+                    document.getElementById('studentsList').innerHTML = data.users.map(s => `
+                        <div class="student-item">
+                            <div class="student-info">
+                                <div class="student-avatar">${s.name.charAt(0)}</div>
+                                <div>
+                                    <div style="font-weight:600">${s.name}</div>
+                                    <div style="font-size:11px;color:var(--text-muted)">${s.email}</div>
+                                </div>
+                            </div>
+                            <div style="font-size:11px;color:var(--text-muted)">${s.last_login ? new Date(s.last_login).toLocaleDateString() : 'Never'}</div>
+                        </div>
+                    `).join('');
+                    document.getElementById('statStudents').textContent = data.users.length;
+                } else {
+                    document.getElementById('studentsList').innerHTML = '<div class="loading-spinner" style="padding:16px">No students registered yet</div>';
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadStudentCount() {
+            try {
+                const res = await Auth.authFetch('/api/auth/users?role=student');
+                if (!res) return;
+                const data = await res.json();
+                if (data.status === 'success') {
+                    document.getElementById('statStudents').textContent = data.total || 0;
+                }
+            } catch { document.getElementById('statStudents').textContent = '—'; }
+        }
+
+        async function loadActivity() {
+            try {
+                const activity = await Auth.getActivity(10);
+                const actList = document.getElementById('activityList');
+                if (activity && activity.status === 'success' && activity.activities.length > 0) {
+                    actList.innerHTML = activity.activities.map(a => {
+                        const dotClass = a.action.includes('login') ? 'login' : a.action.includes('register') ? 'register' : 'other';
+                        return `<li class="activity-item">
+                            <span class="activity-dot ${dotClass}"></span>
+                            <span class="activity-text">${a.action}${a.details ? ' — ' + a.details : ''}</span>
+                            <span class="activity-time">${new Date(a.created_at).toLocaleString()}</span>
+                        </li>`;
+                    }).join('');
+                } else {
+                    actList.innerHTML = '<li class="activity-item"><span class="activity-text" style="color:var(--text-muted)">No activity</span></li>';
+                }
+            } catch { }
+        }
+
+        function loadProfile() {
+            document.getElementById('activityCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>
